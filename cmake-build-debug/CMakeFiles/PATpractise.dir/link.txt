@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/PATpractise.dir/1003/main.cpp.cpp.o  -o PATpractise 
