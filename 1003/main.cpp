@@ -6,7 +6,7 @@
 #include <algorithm>
 using namespace std;
 
-const int MAXNUM = 500;
+const int MAXNUM = 510;
 const int MAXDIST = 10000;
 
 int dist[MAXNUM],previous[MAXNUM],rescueNum[MAXNUM],num[MAXNUM],w[MAXNUM];
@@ -23,14 +23,13 @@ void dijkstra(int v0,int n){
     dist[v0] = 0;
     w[v0] = rescueNum[v0];
     num[v0] = 1;
-    visit[v0] = true;
 
     for(int i=1;i<n;i++){
         int u = -1,mindist = MAXDIST;
         for(int j=0;j<n;j++){
             if(dist[j]<mindist&&!visit[j]){
                 u = j;
-                mindist = dist[i];
+                mindist = dist[j];
             }
         }
 
@@ -38,26 +37,19 @@ void dijkstra(int v0,int n){
         visit[u]=true;
 
         for(int j=0;j<n;j++){
-            if(dist[u]+roadLen[u][j]<dist[j]&&!visit[j]){
-                dist[j] = dist[u] + roadLen[u][j];
-                previous[j]=u;
-                num[j] = num[u];
-                w[j] = w[u] + rescueNum[j];
-            }else if(dist[u] + roadLen[u][j] == dist[j]&&!visit[j]) {
-                rescueNum[j] = rescueNum[j] + rescueNum[u];
-                if(w[u] + rescueNum[j] > w[j])
+            if(!visit[j]&&dist[j])
+                if(dist[u]+roadLen[u][j]<dist[j]&&!visit[j]){
+                    dist[j] = dist[u] + roadLen[u][j];
+                    previous[j]=u;
+                    num[j] = num[u];
                     w[j] = w[u] + rescueNum[j];
-            }
+                }else if(dist[u] + roadLen[u][j] == dist[j]&&!visit[j]) {
+                    num[j] += num[u];
+                    if(w[u] + rescueNum[j] > w[j])
+                        w[j] = w[u] + rescueNum[j];
+                }
         }
     }
-}
-
-void printPath(int v0){
-    int u = v0;
-    do{
-        cout << u << " ";
-        u = previous[u];
-    }while(u!=-1);
 }
 
 int main() {
@@ -74,6 +66,6 @@ int main() {
         roadLen[b][a] = c;
     }
     dijkstra(c1,n);
-    printPath(c2);
+    cout << num[c2] << " " << w[c2];
     return 0;
 }
