@@ -1,2 +1,0 @@
-Options: 
-CMake: 3.8.2@/home/eason/Public/apps/CLion/ch-0/172.3317.49/bin/cmake/bin/cmake
