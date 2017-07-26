@@ -1,2 +1,2 @@
 # PATpractise
-practise PAT exercises
+PAT exercises
