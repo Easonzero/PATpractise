@@ -34,24 +34,24 @@ int main(){
 
     sort(v.begin(),v.end(),cmp);
 
+    if(v[0]->distance!=0){
+        printf("The maximum travel distance = 0.00");
+        return 0;
+    }
+
     float reach=0,preprice=0,total=0,min = MAX,ctmp=c,cmin=MAX;
     for(auto station:v){
         float dt = station->distance-reach;
-        if(station->price<=preprice||station->distance==0){
-            if(dt > ctmp*avg){
-                total += ctmp*preprice;
-                reach += ctmp*avg;
-                total +=
-                preprice = station->price;
-                min = MAX;
-                ctmp = c;
-            }else{
+        if(station->price<=preprice||station->distance==0) {
+            if (dt <= ctmp * avg) {
                 total += dt*preprice/avg;
-                reach = station->distance;
-                preprice = station->price;
-                min = MAX;
-                ctmp = c;
+            }else{
+                total += ctmp*preprice+(dt-ctmp*avg)*min/avg;
             }
+            reach = station->distance;
+            preprice = station->price;
+            min = MAX;
+            ctmp = c;
         }else if(dt > ctmp*avg&&min!=MAX){
             total += ctmp*preprice;
             reach += ctmp*avg;
@@ -59,7 +59,7 @@ int main(){
                 preprice = min;
                 ctmp = cmin;
                 min = station->price;
-                cmin = (station->distance-reach)/avg;
+                cmin = c-ctmp+(station->distance-reach)/avg;
             }else{
                 total += (dt-ctmp*avg)*min/avg;
                 reach = station->distance;
@@ -70,7 +70,7 @@ int main(){
         }else if(dt > ctmp*avg&&min==MAX){
             printf("The maximum travel distance = %.2f",reach+ctmp*avg);
         }else{
-            if(station->price<min) {
+            if(station->price < min) {
                 min = station->price;
                 cmin = (station->distance-reach)/avg;
             }
