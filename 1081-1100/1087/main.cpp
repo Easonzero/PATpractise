@@ -11,7 +11,7 @@ const int MAX = 99999;
 
 map<string,int> mapId;
 
-int A[210][210],dh[210],pre[210],cost[210],happ[210],num[210];
+int A[210][210],dh[210],pre[210],cost[210],happ[210],num[210],node[210];
 
 void dijk(int n){
     bool visit[n];
@@ -20,18 +20,20 @@ void dijk(int n){
     fill(pre,pre+n,-1);
     fill(cost,cost+n,MAX);
     fill(happ,happ+n,0);
-    fill(num,num+n,0);
+    fill(num,num+n,1);
+    fill(node,node+n,0);
 
     cost[0] = 0;
 
     for(int i=0;i<n;i++){
-        int u=0,min=MAX;
+        int u=-1,min=MAX;
         for(int i=0;i<n;i++){
             if(!visit[i]&&min>cost[i]){
                 min = cost[i];
                 u = i;
             }
         }
+        if(u==-1) break;
         visit[u] = true;
         for(int i=0;i<n;i++){
             if(!visit[i]&&A[u][i]<MAX){
@@ -39,12 +41,19 @@ void dijk(int n){
                     cost[i] = cost[u]+A[u][i];
                     pre[i] = u;
                     happ[i] = happ[u]+dh[i];
-                    num[i] = 1;
+                    num[i] = num[u];
+                    node[i] = node[u]+1;
                 }else if(cost[i]==cost[u]+A[u][i]){
-                    num[i]++;
+                    num[i] += num[u];
                     if(happ[i]<happ[u]+dh[i]){
                         pre[i] = u;
                         happ[i] = happ[u]+dh[i];
+                        node[i] = node[u]+1;
+                    }else if(happ[i]==happ[u]+dh[i]){
+                        if(node[i]>node[u]+1){
+                            pre[i] = u;
+                            node[i] = node[u]+1;
+                        }
                     }
                 }
             }
@@ -65,7 +74,7 @@ void print(int v){
         s.push(getCity(p));
         p = pre[p];
     }
-    cout << num[v] << " " << cost[v] << " " << happ[v] << " " << happ[v]/2 << endl;
+    cout << num[v] << " " << cost[v] << " " << happ[v] << " " << happ[v]/(s.size()-1) << endl;
     while(!s.empty()){
         cout << s.top();
         s.pop();
