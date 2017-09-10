@@ -3,5 +3,5 @@ project(PATpractise)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES 1121-1140/1127/main.cpp)
+set(SOURCE_FILES 1121-1140/1126/main.cpp)
 add_executable(PATpractise ${SOURCE_FILES})
